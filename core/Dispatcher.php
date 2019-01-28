@@ -13,7 +13,7 @@ class Dispatcher
         if(get_class_methods($controller))
         {
             if(empty($this->requeste->action))
-                 $this->requeste->action = "view";
+                 $this->requeste->action = "index";
             if(!in_array($this->requeste->action,get_class_methods($controller)))
                  $controller->error("not found");
             try {

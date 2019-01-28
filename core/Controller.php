@@ -16,12 +16,11 @@ abstract class Controller
             $path = VIEW.$view.".php";
         else
             $path = VIEW.DS.$this->request->controller.DS.$view.".php";
-        echo $view;
         if(file_exists($path))
             include_once $path;   
         else 
         {
-            $message = "file not Found check it";
+            $message = "Cant Acecess to this ";
             
             include_once VIEW.DS."errors/404.php";
             die();
@@ -31,6 +30,19 @@ abstract class Controller
        
         header("HTTP/1.0 404 Not Found");
         $this->render('/errors/404',array("message"=>$message));
+        die();
+    }
+    public function redirect($location = "")
+    {
+        if(empty($location))
+        {   
+            if(isset($_SERVER['HTTP_REFERER'])) 
+                $location = $_SERVER['HTTP_REFERER'];
+            else
+                $location=RACINE_URL;
+        }
+        $location = RACINE_URL."/".$location;
+        header('Location: ' .$location);
         die();
     }
 }
