@@ -4,7 +4,7 @@
     public $table_name ="comment";
     public $primary_colum="id";
 
-    public function getAllCommentsInfo($colm ='' ,$orderBy="DESC",$cond="")
+    public function getAllCommentsInfo($cond="", $colm ='', $orderBy="DESC")
     {
        try {
            if(empty($colm))
