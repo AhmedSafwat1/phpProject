@@ -18,7 +18,7 @@ require_once CORE.DS."Include.php";
 //=================================================================================
 
 
-
+echo "welcom eman";
 
 $a =new Dispatcher();
 
