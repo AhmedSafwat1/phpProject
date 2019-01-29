@@ -40,8 +40,12 @@ abstract class Controller
                 $location = $_SERVER['HTTP_REFERER'];
             else
                 $location=RACINE_URL;
+            
         }
-        $location = RACINE_URL."/".$location;
+        else {
+            $location = RACINE_URL."/".$location;
+        }
+       
         header('Location: ' .$location);
         die();
     }

@@ -8,6 +8,9 @@ class postController extends Controller
             $this->error("not Found Url enter correct");
         $this->render("post");
     }
-   
+   public function index()
+   {
+        $this->redirect("home");
+   }
 }
 ?>
