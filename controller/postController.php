@@ -14,6 +14,7 @@ class postController extends Controller
             $this->error("not Found Url enter correct");
         $this->redirect();
     }
+    
 } 
 
 ?>
