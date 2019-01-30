@@ -43,6 +43,7 @@ class homeController extends Controller
         print_r($z->getAllCommentsInfo());
         $this->render("home");
     }
+    
 } 
 
 ?>

@@ -18,7 +18,7 @@
        }
        return $result;
     }
-    public function getAllPostInfo($colm ='' ,$orderBy="DESC",$cond="")
+    public function getAllPostInfo($cond="", $colm ='' , $orderBy="DESC")
      {
         try {
             if(empty($colm))
@@ -33,6 +33,8 @@
         }
         return $result;
      }
+
+    
 
      
  }
