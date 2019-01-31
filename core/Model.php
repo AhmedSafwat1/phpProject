@@ -42,7 +42,9 @@ abstract class Model {
      {
         $this->conn = Model::$cnx['news'];
         $sql  = $this->make_insert($data);
+        
         $stmt = $this->conn->prepare($sql);
+      
         try {
             $stmt->execute($data);
             }
@@ -60,10 +62,12 @@ abstract class Model {
      public function update(array $data, $cond, $colum = "" )
      {
         $this->conn = Model::$cnx['news'];
-        $sql  = $this->make_update($data,$colum,$cond);
-        $stmt = $this->conn->prepare($sql);
+       
         if(empty($colum))
             $colum = $this->primary_colum;
+        $sql  = $this->make_update($data,$colum,$cond);
+        $stmt = $this->conn->prepare($sql);
+        
         try {
             $stmt->execute($data);
             }

@@ -3,7 +3,7 @@
      public $conn ;
      public $table_name ="users";
      public $primary_colum="user_id";
-
+     public $type = array("Admin","User","Writer");
      public function getAllPost($cond, $colm ='post_created' ,$orderBy="DESC")
      {
         try {

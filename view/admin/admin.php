@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
      <!-- css import for bootstrap  -->
     <link rel="stylesheet" href="<?php echo CSS."bootstrap.min.css" ?>" crossorigin="anonymous">
+    <link rel="stylesheet" href="<?php echo CSS."font-awesome/css/all.min.css" ?>" >
     <title>Admin</title>
 </head>
 <body>
@@ -31,7 +32,35 @@
             </ul>
         </div>
     </nav>
-
+    <!-- start stacticatisic -->
+    <div class="container">
+        <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="card text-white bg-danger mb-3 w-100" style="max-width: 20rem;">
+                        <div class="card-body text-center">
+                            <h4 class="card-title"><i class="fas fa-users fa-5x"></i></h4>
+                            <p class="card-text h1 "><?php echo count($users) ?>.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-primary mb-3 w-100" style="max-width: 20rem;">
+                        <div class="card-body text-center">
+                            <h4 class="card-title"><i class="far fa-newspaper fa-5x"></i></h4>
+                            <p class="card-text h1 "><?php echo count($posts) ?>.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-white bg-success mb-3 w-100" style="max-width: 20rem;">
+                        <div class="card-body text-center">
+                            <h4 class="card-title"><i class="fas fa-comments fa-5x"></i></h4>
+                            <p class="card-text h1 "><?php echo count($comments) ?>.</p>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
     <!-- start table for display user -->
     <div class="container">
         <div class="table-responsive mt-5" style="max-height:600px!important; overflow: auto;">
@@ -54,13 +83,13 @@
                             <td>{$value['user_email']}</td>
                             <td>{$type[intval($value['user_type'])]}</td>
                             <td class=''>
-                                <a class='mr-2 mb-1 btn btn-danger' href='del/".$value["user_id"]."'>Delete</a>
-                                <a   class='mr-2 mb-1 btn btn-primary' href='update/".$value["user_id"]."'>Update</a>
+                                <a class='mr-2 mb-1 btn btn-danger' href='admin/del/user/".$value["user_id"]."'>Delete</a>
+                                <a   class='mr-2 mb-1 btn btn-primary' href='admin/update/user/".$value["user_id"]."'>Update</a>
                         ";
                         if($value['status'])
-                            echo "<a class ='btn btn-dark' href='block/".$value["user_id"]."'>Block</a> </td>";
+                            echo "<a class ='btn btn-dark' href='admin/block/user/".$value["user_id"]."'>Block</a> </td>";
                         else
-                            echo "<a class ='btn btn-success' href='active/".$value["user_id"]."'>Active</a> </td>";
+                            echo "<a class ='btn btn-success' href='admin/active/user/".$value["user_id"]."'>Active</a> </td>";
 
                     }
                 }
@@ -93,13 +122,16 @@
                             <td>{$cat[intval($value['post_categories'])]}</td>
                             <td>{$value['post_created']}</td>
                             <td class=''>
-                                <a class='mr-2 mb-1 btn btn-danger' href='del/".$value["post_id"]."'>Delete</a>
-                                <a   class='mr-2 mb-1 btn btn-primary' href='update/".$value["post_id"]."'>Update</a>
+                                <a class='mr-2 mb-1 btn btn-danger' href='admin/del/post/".$value["post_id"]."'>Delete</a>
+                                <a   class='mr-2 mb-1 btn btn-primary' href='admin/update/post/".$value["post_id"]."'>Update</a>
                         ";
-                        if($value['post_status'])
+                        if($value['post_status'] == 2)
                             echo "</td>";
                         else
-                            echo "<a class ='btn btn-success' href='active/".$value["post_id"]."'>Active</a> </td>";
+                        {
+                            echo "<a class ='btn btn-success' href='admin/active/post/".$value["post_id"]."'>Approve</a> ";
+                            echo "<a class ='btn btn-warning' href='admin/block/post/".$value["post_id"]."'>Rfuse</a> </td>";
+                        }
 
                     }
                 }
@@ -108,7 +140,7 @@
         </div>
 
 
-         <!-- comment -->
+         <!-- comment
          <div class="table-responsive mt-5" style="max-height:600px!important; overflow: auto;">
             <table class="table table-striped">
                 <thead class="thead-dark">
@@ -145,7 +177,7 @@
                 }
                 ?>
             </table>
-        </div>
+        </div> -->
     </div>
 
     <!-- js import for bootstrap  -->

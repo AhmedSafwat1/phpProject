@@ -49,5 +49,22 @@ abstract class Controller
         header('Location: ' .$location);
         die();
     }
+    public function refresh($time=4, $location = "")
+    {
+        if(empty($location))
+        {   
+            if(isset($_SERVER['HTTP_REFERER'])) 
+                $location = $_SERVER['HTTP_REFERER'];
+            else
+                $location=RACINE_URL;
+            
+        }
+        else {
+            $location = RACINE_URL."/".$location;
+        }
+       
+        header("Refresh:$time; url=$location");
+        die();
+    }
 }
 ?>
