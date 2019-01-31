@@ -11,7 +11,7 @@
 </head>
 <body class="text-center">
     <!-- start login bar  -->
-    <form class="form-signin w-25 mx-auto" action='<?php echo RACINE_URL."/admin/login"?>' method="post">
+    <form class="form-signin w-25 mx-auto" action='<?php echo RACINE_URL."/admin/enter"?>' method="post">
         <span>
             <i class="fas fa-sign-in-alt fa-8x"></i>
         </span>

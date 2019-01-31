@@ -27,7 +27,6 @@
             $this->conn = Model::$cnx['news'];
             $result = [];
             $sql = "select * from User_Post $cond ORDER BY $colm $orderBy";
-            
             $q = $this->conn->query($sql);
             $result = $q->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

@@ -18,4 +18,23 @@
         return $result;
      }
 
+     public function login($userName,$password,$admin="")
+     {
+        $result = [];
+        
+        try {
+            $this->conn = Model::$cnx['news'];
+           
+            $sql = "select * from users where
+             user_name = '$userName'
+             and status= '1' 
+             and user_password = '$password' $admin limit 1";
+            $q = $this->conn->query($sql);
+            $result = $q->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die("" . $e->getMessage());
+        }
+        return $result;
+     }
+
  }

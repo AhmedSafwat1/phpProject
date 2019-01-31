@@ -6,6 +6,8 @@ class adminController extends Controller
     {
         if(func_num_args() > 0)
             $this->error("not Found Url enter correct");
+        if(!isset( $_SESSION['user_admin']))
+            $this->redirect("admin/enter");
         $users = new User();
         $post = new Post();
         $comment = new Comment();
@@ -15,7 +17,9 @@ class adminController extends Controller
                          "type" => $type,
                          "posts" => $post->getAllPostInfo(),
                          "cat" =>$categories,
-                         "comments" => $comment->getAllPostCommentInfo()
+                         "comments" => $comment->getAllPostCommentInfo(),
+                         "adminId" =>$_SESSION['user_admin'],
+                         "userId" => $users->getOne($_SESSION['user_admin'],"user_name")[0]["user_id"]
                         );
                     
         $this->render("admin",$context);
@@ -24,6 +28,8 @@ class adminController extends Controller
     {
         if(func_num_args() > 2)
             $this->error("not Found Url enter correct");
+        if(!isset( $_SESSION['user_admin']))
+            $this->redirect("admin/enter");
         $users = new User();
         $post = new Post();
         if(strcmp($type,"user") == 0)
@@ -73,6 +79,8 @@ class adminController extends Controller
     {
         if(func_num_args() > 2)
             $this->error("not Found Url enter correct");
+        if(!isset( $_SESSION['user_admin']))
+            $this->redirect("admin/enter");
         $users = new User();
         $post = new Post();
         if(strcmp($type,"user") == 0)
@@ -123,6 +131,8 @@ class adminController extends Controller
     {
         if(func_num_args() > 2)
             $this->error("not Found Url enter correct");
+        if(!isset( $_SESSION['user_admin']))
+            $this->redirect("admin/enter");
         $users = new User();
         $post = new Post();
         if(strcmp($type,"user") == 0)
@@ -173,6 +183,8 @@ class adminController extends Controller
     {
         if(func_num_args() > 2)
             $this->error("not Found Url enter correct");
+        if(!isset( $_SESSION['user_admin']))
+            $this->redirect("admin/enter");
         $users = new User();
         $post = new Post();
         if(strcmp($type,"user") == 0)
@@ -180,7 +192,14 @@ class adminController extends Controller
             if(isset($_POST['submit']))
             {
                 unset($_POST['submit']);
+                $s_id =$users->getOne($_SESSION['user_admin'],"user_name")[0]["user_id"];
                 $users->update($_POST,$id);
+                if($id == $s_id)
+                {
+                    $newNmae = $users->getOne($id)[0]["user_name"];
+                    $_SESSION["user_admin"] = $newNmae;
+                    $_SESSION["user_name"] = $newNmae;
+                }
             
                 echo "
                 <div style = 'padding: 40px;
@@ -196,6 +215,7 @@ class adminController extends Controller
             else {
                 $context  = array(
                             'data' => $users->getOne($id)[0],
+                            "userId" => $users->getOne($_SESSION['user_admin'],"user_name")[0]["user_id"]
                          );
                 $this->render("updateUser",$context);
             }
@@ -222,6 +242,7 @@ class adminController extends Controller
                 $context  = array(
                             'data' => $post->getAllPostInfo("where post_id = $id")[0],
                             "cat" => $post->categories,
+                            "userId" => $users->getOne($_SESSION['user_admin'],"user_name")[0]["user_id"]
                          );
                 $this->render("updatePost",$context);
             }
@@ -239,6 +260,50 @@ class adminController extends Controller
             ";
             $this->refresh("5","admin");
         }
+    }
+
+    public function enter()
+    {
+        if(func_num_args() > 0)
+            $this->error("not Found Url enter correct");
+        if(isset($_POST["submit"]))
+        {
+            $userName = $_POST["user_name"];
+            $password = $_POST['user_password'];
+            $user = new User();
+            $admin = $user->login($userName,$password);
+            
+            if($admin)
+            {
+                $_SESSION['user_admin'] = $admin['user_name'];
+                $_SESSION['user_name'] = $admin['user_name'];
+                $this->redirect("admin");
+            }
+            else {
+                echo "
+                <div style = 'padding: 40px;
+                    background-color: red;
+                        color: white;
+                        size:40px;
+                        margin-bottom: 15px;'>
+                            login errot passord or use name sucess 
+                        </div>
+                ";
+                $this->refresh(2,"admin/enter");
+            }
+        }
+        else {
+            $this->render("login");
+        }
+    }
+    public function leave()
+    {
+        if(func_num_args() > 0)
+             $this->error("not Found Url enter correct");
+        if(!isset( $_SESSION['user_admin']))
+             $this->redirect("admin/enter");
+        $this->logout("admin/enter");
+        
     }
 
 }

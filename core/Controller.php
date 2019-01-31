@@ -66,5 +66,14 @@ abstract class Controller
         header("Refresh:$time; url=$location");
         die();
     }
+    public function logout($location="home")
+    {
+        if(isset( $_SESSION['user_admin']))
+            unset( $_SESSION['user_admin']);
+        if(isset( $_SESSION['user_name']))
+            unset( $_SESSION['user_name']);
+        session_destroy();
+        $this->redirect($location);
+    }
 }
 ?>

@@ -105,7 +105,8 @@ abstract class Model {
             if(empty($colm))
                 $colm = $this->primary_colum;
             $result = [];
-            $sql = "select * from {$this->table_name} where $colm $oper $cond LIMIT 1";
+            $sql = "select * from {$this->table_name} where $colm $oper '$cond' LIMIT 1";
+            
             $q = $this->conn->query($sql);
             $result = $q->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

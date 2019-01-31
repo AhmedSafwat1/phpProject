@@ -11,9 +11,8 @@
 </head>
 <body>
     <!-- start nav bar  -->
-    
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Dashboard</a>
+        <a class="navbar-brand" href="<?php echo RACINE_URL.'/admin'?>">Dashboard</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,9 +34,9 @@
                 <span style="widht:100px;"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdown04">
-                <a class="dropdown-item" href="admin/leave">Logout</a>
+                <a class="dropdown-item" href="<?php echo RACINE_URL ?>/admin/leave">Logout</a>
                 <a class="dropdown-item" href="#">Go Website</a>
-                <a class="dropdown-item" href="admin/update/user/<?php echo $userId ?>">Edit Profile</a>
+                <a class="dropdown-item" href="<?php echo RACINE_URL ?>/admin/update/user/<?php echo $userId ?>">Edit Profile</a>
                 </div>
             </li>
             </ul>

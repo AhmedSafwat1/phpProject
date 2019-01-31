@@ -20,7 +20,7 @@ require_once CORE.DS."Include.php";
 //=================================================================================
 
 
-
+session_start();
 
 $a =new Dispatcher();
 
