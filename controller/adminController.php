@@ -192,25 +192,55 @@ class adminController extends Controller
             if(isset($_POST['submit']))
             {
                 unset($_POST['submit']);
-                $s_id =$users->getOne($_SESSION['user_admin'],"user_name")[0]["user_id"];
-                $users->update($_POST,$id);
-                if($id == $s_id)
+                $user = $users->getOne($id)[0];
+                
+                 // valid befor submit
+                $valid = new Validation();
+                
+                if(strcmp($_POST['user_email'],$user['user_email']) != 0)
                 {
-                    $newNmae = $users->getOne($id)[0]["user_name"];
-                    $_SESSION["user_admin"] = $newNmae;
-                    $_SESSION["user_name"] = $newNmae;
+                    
+                    $valid->name("user email")->value($_POST['user_email'])->pattern('email')
+                        ->required()->max(100)
+                        ->Unique("users", "user_email", $_POST['user_email']);
                 }
+                if(strcmp($_POST['user_name'],$user['user_name']) != 0)
+                {
+                    $valid->name("user name")->value($_POST['user_name'])->pattern('alphanum')->required()
+                                            ->Unique("users", "user_name", $_POST['user_name']);
+                }
+                 
+                if(empty($valid->errors))
+                {
+                    $s_id =$users->getOne($_SESSION['user_admin'],"user_name")[0]["user_id"];
+                    $users->update($_POST,$id);
+                    if($id == $s_id)
+                    {
+                        $newNmae = $users->getOne($id)[0]["user_name"];
+                        $_SESSION["user_admin"] = $newNmae;
+                        $_SESSION["user_name"] = $newNmae;
+                    }
+                    echo "
+                    <div style = 'padding: 40px;
+                        background-color: blue;
+                            color: white;
+                            size:40px;
+                            margin-bottom: 15px;'>
+                                update sucess 
+                            </div>
+                    ";
+                    $this->refresh(2,"admin");
+                }
+                else {
+                    $context  = array(
+                        'data' => $_POST,
+                        "userId" => $users->getOne($_SESSION['user_admin'],"user_name")[0]["user_id"],
+                        "errors" => $valid->errors
+                     );
+                   $this->render("updateUser",$context);
+                }
+              
             
-                echo "
-                <div style = 'padding: 40px;
-                    background-color: blue;
-                        color: white;
-                        size:40px;
-                        margin-bottom: 15px;'>
-                            update sucess 
-                        </div>
-                ";
-                $this->refresh(2,"admin");
             }
             else {
                 $context  = array(
@@ -224,19 +254,43 @@ class adminController extends Controller
         {
             if(isset($_POST['submit']))
             {
+                //to remove name submit from post
                 unset($_POST['submit']);
-                $post->update($_POST,$id);
-            
-                echo "
-                <div style = 'padding: 40px;
-                    background-color: blue;
-                        color: white;
-                        size:40px;
-                        margin-bottom: 15px;'>
-                            update sucess 
-                        </div>
-                ";
-                $this->refresh(2,"admin");
+                // valid befor submit
+                $valid = new Validation();
+                $valid->name("title")->value($_POST['post_title'])->pattern('alphanum')->required()
+                                    ->max(100);
+                $valid->name("post content")->value($_POST['post_content'])->pattern('alphanum')->required();
+                $ext = ['jpg','png','jpeg'];
+                $image = new UploadFile($ext, UPLOAD, 561487);
+                //if all valid
+                if(empty($valid->errors) && empty($image->errors) && $image->upload($_FILES['post_image']))
+                {
+                    unset($_POST['user_name']);
+                    $post->update($_POST,$id);
+                
+                    echo "
+                    <div style = 'padding: 40px;
+                        background-color: blue;
+                            color: white;
+                            size:40px;
+                            margin-bottom: 15px;'>
+                                update sucess 
+                            </div>
+                    ";
+                    $this->refresh(2,"admin");
+                }
+                else {
+                    // if errors happen diplay and return old data
+                    $data = $_POST;
+                    $context  = array(
+                        'data' => $data,
+                        "cat" => $post->categories,
+                        "userId" => $users->getOne($_SESSION['user_admin'],"user_name")[0]["user_id"],
+                        "errors" =>array_merge($valid->errors, $image->errors)
+                     );
+                    $this->render("updatePost",$context);
+                }
             }
             else {
                 $context  = array(

@@ -45,6 +45,17 @@
     <!-- start form  -->
     <?php ?>
     <div class="container mt-5">
+    <?php
+           if(isset($errors))
+           {
+                foreach ($errors as $key => $value) {
+                    echo "<div class='alert alert-danger alert-dismissible'>
+                    <button type='button' class='close' data-dismiss='alert'>&times;</button>
+                    <strong>$key!</strong> $value.
+                  </div>";
+                }
+           }
+        ?>
         <form action='<?php echo RACINE_URL."/admin/update/user/".$data["user_id"];?>' method="post">
             <div class="form-group mb-3">
                 <label for="exampleInputEmail1">Email address</label>
