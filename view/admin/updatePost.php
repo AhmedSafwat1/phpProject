@@ -67,9 +67,9 @@
             </div>
             <div class="form-group mb-3">
                 <label for="formGroupExampleInput">post publish</label>
-                <input type="text" class="form-control" id="formGroupExampleInput" name="user_name"  value = "<?php echo $data['user_name'];?>" placeholder="user publish">
+                <input type="text" disabled class="form-control" id="formGroupExampleInput"   value = "<?php echo $data['user_name'];?>" placeholder="user publish">
             </div>
-            <input type="hidden" class="form-control" id="formGroupExampleInput" name="user_name" disabled value = "<?php echo $data['user_name'];?>" placeholder="user publish">
+            <input type="hidden" class="form-control" id="formGroupExampleInput" name="user_name"  value = "<?php echo $data['user_name'];?>" placeholder="user publish">
             <select class="form-control mb-3" name="post_status">
                 <option value="2" <?php if($data['post_status'] == "2"){echo "selected";} ?>>Aprove</option>
                 <option value="1" <?php if($data['post_status'] == "1"){echo "selected";} ?>>Pending</option>
@@ -95,7 +95,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleFormControlFile1">Choose Image</label>
-                <input type="file"  required accept="image/png, image/jpeg, image/jpg" class="form-control-file" id="exampleFormControlFile1" name="post_image">
+                <input type="file"   accept="image/png, image/jpeg, image/jpg" class="form-control-file" id="exampleFormControlFile1" name="post_image">
             </div>
                 <input type="submit" class="btn btn-primary" value="submit" name="submit">
                 <a href="<?php echo  RACINE_URL.'/admin' ;?>" class="btn btn-danger">Cancel</a>

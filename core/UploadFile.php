@@ -9,7 +9,7 @@ class UploadFile
     public $AllowExt;
     public $location;
     public $AllowSize;
-    private $Name;
+    public $Name;
     public function __construct(array $extenstion, string $location, $size)
     {
         if(is_array($extenstion) && is_int($size))
@@ -54,26 +54,31 @@ class UploadFile
     }
     public function upload($file, $mulit = 0, $reuired = 1)
     {
+        
         if(!$mulit)
         {
-            if(isset($file))
+            
+            if($file['error'] != 4)
             {
                 
                 $this->checkExtenstion($file['name'])->checkSize($file['size'], $file['name']);
                 if(empty($this->errors))
                 {
-                    
                     $this->Name = $this->makeNewName($file['name']);
                     $dest = $this->location.$this->Name;
-                    chmod ($file['tmp_name'], 777 ) ;
                     if(move_uploaded_file($file['tmp_name'], $dest));
                         return true;
                     
                 }
             }
             else {
+               
                 if($reuired)
-                    $this->errors["required"] = "must choose the file";
+                {
+                    $this->errors["required"] = "must choose the image";
+                    return false;
+                }
+                return true;
             }
             return false;
         }

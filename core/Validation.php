@@ -48,9 +48,11 @@
          * @param mixed $value
          * @return this
          */
-        public function value($value){
+        public function value(&$value){
             
             $this->value = $value;
+            $value = trim($value);
+            $value = htmlspecialchars($value);
             return $this;
         
         }
@@ -98,14 +100,14 @@
             if($name == 'array'){
                 
                 if(!is_array($this->value)){
-                    $this->errors[] = 'Formato campo '.$this->name.' non valido.';
+                    $this->errors[] = 'Formate  '.$this->name.' non vlid.';
                 }
             
             }else{
             
                 $regex = '/^('.$this->patterns[$name].')$/u';
                 if($this->value != '' && !self::is_email($this->value)){
-                    $this->errors[] = 'Formato campo '.$this->name.' non valido vaue= '.$this->value;
+                    $this->errors[] = 'Formate  '.$this->name.' non vlaid value= '.$this->value;
                 }
                 
             }
@@ -137,7 +139,7 @@
         public function required(){
             
             if((isset($this->file) && $this->file['error'] == 4) || ($this->value == '' || $this->value == null)){
-                $this->errors[] = 'Campo '.$this->name.' obbligatorio.';
+                $this->errors[] = 'Input '.$this->name.' required.';
             }            
             return $this;
             

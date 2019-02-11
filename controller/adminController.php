@@ -206,7 +206,7 @@ class adminController extends Controller
                 }
                 if(strcmp($_POST['user_name'],$user['user_name']) != 0)
                 {
-                    $valid->name("user name")->value($_POST['user_name'])->pattern('alphanum')->required()
+                    $valid->name("user name")->value($_POST['user_name'])->required()
                                             ->Unique("users", "user_name", $_POST['user_name']);
                 }
                  
@@ -257,16 +257,25 @@ class adminController extends Controller
                 //to remove name submit from post
                 unset($_POST['submit']);
                 // valid befor submit
+                
                 $valid = new Validation();
-                $valid->name("title")->value($_POST['post_title'])->pattern('alphanum')->required()
+                $valid->name("title")->value($_POST['post_title'])->required()
                                     ->max(100);
-                $valid->name("post content")->value($_POST['post_content'])->pattern('alphanum')->required();
+                $valid->name("post content")->value($_POST['post_content'])->required();
                 $ext = ['jpg','png','jpeg'];
                 $image = new UploadFile($ext, UPLOAD, 561487);
                 //if all valid
-                if(empty($valid->errors) && empty($image->errors) && $image->upload($_FILES['post_image']))
+        
+                if(empty($valid->errors) && empty($image->errors) && $image->upload($_FILES['post_image'],0,0))
                 {
                     unset($_POST['user_name']);
+                    
+                    if($_FILES['post_image']['error'] != 4)
+                    {
+                        $_POST['post_image'] = $image->Name;
+                        if(!empty($post->getOne($id)[0]['post_image']))
+                             unlink(UPLOAD.$post->getOne($id)[0]['post_image']);
+                    }
                     $post->update($_POST,$id);
                 
                     echo "
@@ -283,6 +292,7 @@ class adminController extends Controller
                 else {
                     // if errors happen diplay and return old data
                     $data = $_POST;
+                   
                     $context  = array(
                         'data' => $data,
                         "cat" => $post->categories,
@@ -325,7 +335,7 @@ class adminController extends Controller
             $userName = $_POST["user_name"];
             $password = $_POST['user_password'];
             $user = new User();
-            $admin = $user->login($userName,$password);
+            $admin = $user->login($userName,$password," and user_type = 0");
             
             if($admin)
             {

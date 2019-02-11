@@ -4,4 +4,5 @@
          */
        
         require ('AutoLoad.php');
+        require ('helper.php');
 ?>

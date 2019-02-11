@@ -34,6 +34,21 @@
         }
         return $result;
      }
+     public function getAllPostHaveComment()
+     {
+        try {
+            if(empty($colm))
+                $colm = $this->primary_colum;
+            $this->conn = Model::$cnx['news'];
+            $result = [];
+            $sql = "SELECT * ,count(id)from Post_Comment_User where post_id = post_fk GROUP by post_id";
+            $q = $this->conn->query($sql);
+            $result = $q->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die("" . $e->getMessage());
+        }
+        return $result;
+     }
 
     
 

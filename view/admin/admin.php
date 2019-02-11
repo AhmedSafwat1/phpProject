@@ -89,7 +89,7 @@
                 if(!empty($users))
                 {
                     foreach ($users as $value) {
-                       if(strcmp($value["user_id"], $adminId) == 0)
+                       if(strcmp($value["user_name"], $adminId) != 0)
                        {
                             echo "
                             <tr>
