@@ -36,6 +36,9 @@
             <input type="checkbox" value="remember-me"> Remember me
             </label>
         </div>
+        <p>
+            <a href='<?php echo RACINE_URL."/home/registration"?>'>Reigster Now</a>
+        </p>
         <input class="btn btn-lg btn-primary btn-block" type="submit" name="submit" value="Sign In">
         <p class="mt-5 mb-3 text-muted">© 2018-2018</p>
     </form>

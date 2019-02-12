@@ -57,7 +57,7 @@
                         <!-- Nav Start -->
                         <div class="classynav">
                             <ul>
-                                <li class="active"><a href="catagory.html">Home</a></li>
+                                <li class="active"><a href="<?php echo RACINE_URL.'/home' ?>">Home</a></li>
                                 <li><a href="#"><?php  echo $current['user_name'] ;?></a>
                                     <ul class="dropdown">
                                         <li><a href="<?php echo RACINE_URL.'/home/leave' ?>">Logout</a></li>
@@ -70,10 +70,11 @@
                                     </ul>
                                 </li>
                                 <li><a href="#">Categories</a>
+                              
                                     <ul class="dropdown">
                                         <?php
-                                            foreach ($Categories as $value) {
-                                               echo  "<li><a href=''>$value</a></li>";
+                                            foreach ($Categories as $key=>$value) {
+                                               echo  "<li><a href='".RACINE_URL.'/home/cat/'.$key."'>$value</a></li>";
                                             }
                                         ?>
                                        
@@ -88,7 +89,7 @@
 
                             <!-- Search Form -->
                             <div class="viral-search-form">
-                                <form id="search" action="#" method="get">
+                                <form id="search" action="<?php echo RACINE_URL.'/home/search' ?>" method="get">
                                     <input type="text" name="search-terms" placeholder="Enter Name Of Author To search...">
                                     <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                                 </form>

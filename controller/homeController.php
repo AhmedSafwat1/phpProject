@@ -17,8 +17,8 @@ class homeController extends Controller
             
         $Context  = array(
                    'Categories' => $post->categories,
-                    'TopSlider' => array_slice($post->getAll(), 0, 5),
-                    "allPosts" => $post->getAllPostInfo(),
+                    'TopSlider' => array_slice($post->getAllPostInfo("where post_status = 1"), 0, 5),
+                    "allPosts" => $post->getAllPostInfo("where post_status = 2"),
                     "RatePOst" => array_slice($post->getAllPostHaveComment(),0,3),
                     "lastComments"=> array_slice($comment->getAllPostCommentInfo(),0,3),
                     "latestPost" => array_slice($post->getAll(), 0, 3),
@@ -26,6 +26,65 @@ class homeController extends Controller
                 );
                 
         $this->render("index", $Context);
+    }
+    public function cat($id)
+    {
+        if(func_num_args() > 1)
+            $this->error("not Found Url enter correct");
+        if(!isset( $_SESSION['user_name']))
+             $this->redirect("home/enter");
+        $user = new User(); 
+        $post = new Post();
+        $comment = new Comment();
+        $currentUser = $user->getOne($_SESSION['user_name'],"user_name");
+        if(empty($currentUser))
+            $this->redirect("home/enter");
+            
+        $Context  = array(
+                   'Categories' => $post->categories,
+                    'TopSlider' => array_slice($post->getAllPostInfo("where post_status = 1"), 0, 5),
+                    "allPosts" => $post->getAllPostInfo("where post_status = 2 and post_categories = $id"),
+                    "RatePOst" => array_slice($post->getAllPostHaveComment(),0,3),
+                    "lastComments"=> array_slice($comment->getAllPostCommentInfo(),0,3),
+                    "latestPost" => array_slice($post->getAll(), 0, 3),
+                    "current" => $currentUser[0],
+                    "search" => $post->categories[$id]
+                );
+                
+        $this->render("search", $Context);
+    }
+
+    public function search()
+    {
+        if(func_num_args() > 0)
+            $this->error("not Found Url enter correct");
+        if(!isset( $_SESSION['user_name']))
+             $this->redirect("home/enter");
+        $user = new User(); 
+        $post = new Post();
+        $comment = new Comment();
+        $currentUser = $user->getOne($_SESSION['user_name'],"user_name");
+        if(empty($currentUser))
+            $this->redirect("home/enter");
+        if(isset($_GET['search-terms']) && !empty($_GET['search-terms']))
+        {
+        $search = $_GET['search-terms'];
+        $Context  = array(
+                   'Categories' => $post->categories,
+                    'TopSlider' => array_slice($post->getAllPostInfo("where post_status = 1"), 0, 5),
+                    "allPosts" => $post->getAllPostInfo("where post_status = 2 and user_name = '$search' "),
+                    "RatePOst" => array_slice($post->getAllPostHaveComment(),0,3),
+                    "lastComments"=> array_slice($comment->getAllPostCommentInfo(),0,3),
+                    "latestPost" => array_slice($post->getAll(), 0, 3),
+                    "current" => $currentUser[0],
+                    "search" => $search
+                );
+                
+        $this->render("search", $Context);
+        }
+        else {
+            $this->redirect();
+        }
     }
     public function details($id)
     {
@@ -46,7 +105,7 @@ class homeController extends Controller
        
         $Context  = array(
                    'Categories' => $post->categories,
-                    'TopSlider' => array_slice($post->getAll(), 0, 5),
+                    'TopSlider' => array_slice($post->getAllPostInfo("where post_status = 2"), 0, 5),
                     "post" =>  $postData[0],
                     "RatePOst" => array_slice($post->getAllPostHaveComment(),0,3),
                     "lastComments"=> array_slice($comment->getAllPostCommentInfo(),0,3),
@@ -126,7 +185,7 @@ class homeController extends Controller
                         "post_content" => '' );
         $Context  = array(
             'Categories' => $post->categories,
-             'TopSlider' => array_slice($post->getAll(), 0, 5),
+             'TopSlider' => array_slice($post->getAllPostInfo("where post_status = 2"), 0, 5),
              "RatePOst" => array_slice($post->getAllPostHaveComment(),0,3),
              "lastComments"=> array_slice($comment->getAllPostCommentInfo(),0,3),
              "latestPost" => array_slice($post->getAll(), 0, 3),
@@ -203,9 +262,9 @@ class homeController extends Controller
                     "lastComments"=> array_slice($comment->getAllPostCommentInfo(),0,3),
                     "latestPost" => array_slice($post->getAll(), 0, 3),
                     "user" => $profile[0],
-                    "pendingPOst" => $post->getAllPostInfo(" where post_status = 1 "),
-                    "approvePost" => $post->getAllPostInfo(" where post_status = 2 "),
-                    "RefusePost" => $post->getAllPostInfo(" where post_status = 0 "),
+                    "pendingPOst" => $post->getAllPostInfo(" where post_status = 1 and user_id = {$profile[0]['user_id']}"),
+                    "approvePost" => $post->getAllPostInfo(" where post_status = 2 and user_id = {$profile[0]['user_id']}"),
+                    "RefusePost" => $post->getAllPostInfo(" where post_status = 0 and user_id = {$profile[0]['user_id']}"),
                     "flag" => $flag,
                     "current" => $currentUser[0]
                 );
@@ -219,19 +278,21 @@ class homeController extends Controller
             $this->error("not Found Url enter correct");
         if(!isset( $_SESSION['user_name']))
              $this->redirect("home/enter");
-        $currentUser = $user->getOne($_SESSION['user_name'],"user_name");
-        if(empty($currentUser))
-            $this->redirect("home/enter");
+        
+        
         $user = new User(); 
         $post = new Post();
         $comment = new Comment();
+        $currentUser = $user->getOne($_SESSION['user_name'],"user_name");
+        if(empty($currentUser))
+             $this->redirect("home/enter");
         $data = $post->getOne($id);
       
         if(empty($data))
             $this->error("not Found Url enter correct");
         $Context  = array(
             'Categories' => $post->categories,
-             'TopSlider' => array_slice($post->getAll(), 0, 5),
+             'TopSlider' => array_slice($post->getAllPostInfo("where post_status = 2"), 0, 5),
              "RatePOst" => array_slice($post->getAllPostHaveComment(),0,3),
              "lastComments"=> array_slice($comment->getAllPostCommentInfo(),0,3),
              "latestPost" => array_slice($post->getAll(), 0, 3),
@@ -293,6 +354,8 @@ class homeController extends Controller
         $user = new User(); 
         $post = new Post();
         $comment = new Comment();
+        if(isset( $_SESSION['user_name']))
+             $this->redirect();
      if(isset($_POST['submit']))
          {
            
@@ -350,6 +413,81 @@ class homeController extends Controller
        $this->logout("home/enter");
        
    }
+   public function downlod($id)
+   {
+    if(func_num_args() > 1)
+         $this->error("not Found Url enter correct");
+    $user = new User(); 
+    $post = new Post();
+    $comment = new Comment();
+    $postFile = $post->getOne($id)[0];
+    $pdf = new FPDF();
+    $pdf->AddPage();
+    $pdf->SetFont('Arial','B',16);
+    $pdf->Cell(60,10,$postFile['post_title']);
+    $pdf->Cell(70,10,$postFile['post_content'],3);
+   
+    $pdf->Output();
+   }
+   public function registration()
+    {
+        if(func_num_args() > 0)
+            $this->error("not Found Url enter correct");
+        $user = new User(); 
+        $post = new Post();
+        $comment = new Comment();
+        $data = Array ( "user_email" => "" ,
+                        "user_name" => "" ,
+                        "user_type" => 1,
+                       
+                        );
+        $Context  = array(
+             'data' => $data,
+         );
+         if(isset($_POST['submit']))
+         {
+            unset($_POST['submit']);
+            
+             // valid befor submit
+            $valid = new Validation();
+            
+           
+                
+            $valid->name("user email")->value($_POST['user_email'])->pattern('email')
+                ->required()->max(100)
+                ->Unique("users", "user_email", $_POST['user_email']);
+        
+
+            $valid->name("user name")->value($_POST['user_name'])->required()
+                                    ->Unique("users", "user_name", $_POST['user_name']);
+            
+            $valid->name("Password ")->value($_POST['user_password'])->required();
+            if(empty($valid->errors))
+            {
+                $user->insert($_POST);
+                echo "
+                <div style = 'padding: 40px;
+                    background-color: blue;
+                        color: white;
+                        size:40px;
+                        margin-bottom: 15px;'>
+                            insert sucess  , Watit until confirm from admin 
+                        </div>
+                ";
+                $this->refresh(2,"home/enter");
+            }
+            else {
+                $Context['errors'] = $valid->errors;
+                $Context['data'] = $_POST;
+                $this->render("Reigstration", $Context);
+            }
+           
+         }
+         else {
+            $this->render("Reigstration", $Context);
+         }
+         
+    }
     
 } 
 

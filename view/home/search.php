@@ -42,10 +42,10 @@
                                     echo "
                                         <div class='single-blog-post d-flex align-items-center mb-50'>
                                             <div class='post-thumb'>
-                                                <a href='".RACINE_URL.'/home/details/'.$value['post_id']."'><img src='$img' width='130' height='130' style='height:130px !important;'></a>
+                                                <a href='#'><img src='$img' width='130' height='130' style='height:130px !important;'></a>
                                             </div>
                                             <div class='post-data'>
-                                                <a href='".RACINE_URL.'/home/details/'.$value['post_id']."' class='post-title'>
+                                                <a href='#' class='post-title'>
                                                     <h6>{$value['post_title']}</h6>
                                                 </a>
                                                 <div class='post-meta'>
@@ -73,99 +73,52 @@
             <div class="row">
                 <!-- Blog Posts Area -->
                 <div class="col-12 col-lg-8">
-                   <div class="blog-posts-area">
-
-                        <!-- Single Featured Post -->
+                    <h2 class="texet-primary text-center w-100 my-5">
+                        <?php echo $search?>
+                    </h2>
+                    <div class="row">
+                       
                         <?php
-                            if(empty($post['post_image']))
+                        if(empty($allPosts))
+                        {
+                            echo " <div class='alert alert-warning text-center w-100' role='alert'>
+                           -----$search---- Not Founnd  Any Post for it. 
+                          </div>";
+                        }
+                        foreach ($allPosts as $key => $value) {
+                            if(empty($value['post_image']))
                             $img = TEMP.'img/bg-img/3.jpg';
                             else
-                             $img = UPLOADIMG.$post['post_image'];
-                        ?>
-                        <div class="single-blog-post-details">
-                            <div class="post-thumb">
-                                <img src="<?php echo $img?>" alt="" class='w-100' hight='100'>
-                            </div>
-                            <div class="post-data">
-                                <a href="#" class="post-catagory"><?php echo $Categories[$post['post_categories']]?></a>
-                                <h2 class="post-title"><?php $post['post_title']?></h2>
-                                <div class="post-meta">
-
-                                    <!-- Post Details Meta Data -->
-                                    <div class="post-details-meta-data mb-50 d-flex align-items-center justify-content-between">
-                                        <!-- Post Author & Date -->
-                                        <div class="post-authors-date">
-                                            <p class="post-author">By <a href="<?php echo RACINE_URL.'/home/profile/'.$post['user_id'] ?>"><?php echo $post['user_name']?></a></p>
-                                            <p class="post-date"><?php echo time_elapsed_string($post['post_created'])?></p>
-                                        </div>
-                                        <!-- View Comments -->
-                                        <div class="view-comments">
-                                            <p class="views"><a href='<?php echo RACINE_URL.'/home/downlod/'.$post['user_id'];?>'>Donlwod pdf</a></p>
-                                            <a href="#comments" class="comments"><?php echo count($postComent)?> Comments</a>
+                                $img = UPLOADIMG.$value['post_image'];
+                        
+                            echo "
+                            <div class='col-12 col-lg-6'>
+                                <div class='single-blog-post style-3'>
+                                    <!-- Post Thumb -->
+                                    <div class='post-thumb'>
+                                        <a href='".RACINE_URL.'/home/details/'.$value['post_id']."'><img src='$img' class='w-100' style='height:400px !important' alt=''></a>
+                                    </div>
+                                
+                                    <div class='post-data'>
+                                        <a href='#'' class='post-catagory'>{$Categories[$value['post_categories']]}</a>
+                                        <a href='".RACINE_URL.'/home/details/'.$value['post_id']."' class='post-title'>
+                                            <h6>{$value['post_title']}</h6>
+                                        </a>
+                                        <div class='post-meta'>
+                                            <p class='post-author'>By <a href='".RACINE_URL.'/home/profile/'.$value['user_id']."'>{$value['user_name']}</a></p>
+                                            <p class='post-date'>".time_elapsed_string($value['post_created'])."</p>
                                         </div>
                                     </div>
-
-                                    <p><?php echo $post['post_content']?>.</p>
-
                                 </div>
                             </div>
-                        </div>
+                            ";
+                      
+                        }
+                        
+                        
 
-                        <!-- Comment Area Start -->
-                        <div class="comment_area clearfix" id="comments">
-                            <h4 class="title mb-70"><?php echo count($postComent)?> comment</h4>
+                       ?>
 
-                            <ol>
-                                <!-- Single Comment Area -->
-                                <?php 
-                                if($postComent)
-                                {
-                                    
-                                foreach ($postComent as $key => $value) {
-                                    # code...
-                               
-                                echo "
-                                <li class='single_comment_area'>
-                                    <!-- Comment Content -->
-                                    <div class='comment-content d-flex'>
-                                        <!-- Comment Author -->
-                                        <div class='comment-author'>
-                                            <img src='".TEMP."img/bg-img/t1.jpg' >
-                                        </div>
-                                        <!-- Comment Meta -->
-                                        <div class='comment-meta'>
-                                            <a href='".RACINE_URL.'/home/details/'.$value['post_published']."' class='post-author'>{$value['published']}</a>
-                                            <a href='#' class='post-date'>".time_elapsed_string($value['comment_create'])."</a>
-                                            <p>{$value['comment_content']}.</p>
-                                        </div>
-                                    </div>
-                                    
-                                </li>
-                                ";
-                                }}
-                            ?>
-                            </ol>
-                        </div>
-
-                        <div class="post-a-comment-area">
-                            <h4 class="mb-70">Leave a comment</h4>
-
-                            <!-- Reply Form -->
-                            <div class="contact-form-area">
-                                <form action='<?php echo RACINE_URL."/home/comment/".$post["post_id"];?>' method="post">
-                                    <div class="row">
-                                        
-                                        <div class="col-12">
-                                            <textarea  name='comment_content' class="form-control" id="message" cols="30" rows="10" placeholder="Message"></textarea>
-                                        </div>
-    
-                                        <div class="col-12">
-                                            <button class="btn viral-btn mt-30" type="submit">Submit Comment</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                     </div>
 
                     
@@ -193,16 +146,16 @@
                                 <div class='single-blog-post style-4'>
                                     <!-- Post Thumb -->
                                     <div class='post-thumb'>
-                                        <a href='#'><img src='$img ' class='w-100' style='height:200px !important' ></a>
+                                        <a href='".RACINE_URL.'/home/details/'.$value['post_id']."'><img src='$img ' class='w-100' style='height:200px !important' ></a>
                                         <span class='serial-number'>".($key+1)."</span>
                                     </div>
                                     <!-- Post Data -->
                                     <div class='post-data'>
-                                        <a href='#' class='post-title'>
+                                        <a href='".RACINE_URL.'/home/details/'.$value['post_id']."' class='post-title'>
                                             <h6>{$value['post_title']}</h6>
                                         </a>
                                         <div class='post-meta'>
-                                            <p class='post-author'>By <a href='#'>{$value['user_name']}</a></p>
+                                            <p class='post-author'>By <a href='".RACINE_URL.'/home/details/'.$value['user_id']."'>{$value['user_name']}</a></p>
                                         </div>
                                     </div>
                                 </div>

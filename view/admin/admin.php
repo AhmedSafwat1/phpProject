@@ -36,7 +36,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdown04">
                 <a class="dropdown-item" href="<?php echo RACINE_URL ?>/admin/leave">Logout</a>
-                <a class="dropdown-item" href="#">Go Website</a>
+                <a class="dropdown-item" href="<?php echo RACINE_URL.'/home'?>">Go Website</a>
                 <a class="dropdown-item" href="<?php echo RACINE_URL ?>/admin/update/user/<?php echo $userId ?>">Edit Profile</a>
                 </div>
             </li>

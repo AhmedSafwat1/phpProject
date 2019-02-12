@@ -100,12 +100,12 @@
                                     <div class='single-blog-post style-3'>
                                         <!-- Post Thumb -->
                                         <div class='post-thumb'>
-                                            <a href='#'><img src='$img' class='w-100' style='height:400px !important' alt=''></a>
+                                            <a href='".RACINE_URL.'/home/details/'.$value['post_id']."'><img src='$img' class='w-100' style='height:400px !important' alt=''></a>
                                         </div>
                                     
                                         <div class='post-data'>
                                             <a href='#'' class='post-catagory'>{$Categories[$value['post_categories']]}</a>
-                                            <a href='#' class='post-title'>
+                                            <a href='".RACINE_URL.'/home/details/'.$value['post_id']."' class='post-title'>
                                                 <h6>{$value['post_title']}</h6>
                                             </a>
                                             <div class='post-meta'>
@@ -113,7 +113,7 @@
                                             
                                 ";
                                 if ($flag)
-                                echo "<p class='post-author'><a href='#'>Edit</a></p>"; 
+                                    echo "<p class='post-author'><a href='".RACINE_URL.'/home/edit/'.$value['post_id']."'>Edit</a></p>"; 
                                 echo "
                                 <p class='post-date'>".time_elapsed_string($value['post_created'])."</p>
                                             </div>
