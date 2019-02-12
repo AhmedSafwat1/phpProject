@@ -21,16 +21,27 @@
      public function login($userName,$password,$admin="")
      {
         $result = [];
-        
         try {
             $this->conn = Model::$cnx['news'];
            
             $sql = "select * from users where
              user_name = '$userName'
              and status= '1' 
-             and user_password = '$password' $admin limit 1";
+             $admin limit 1";
             $q = $this->conn->query($sql);
             $result = $q->fetch(PDO::FETCH_ASSOC);
+            if($result)
+            {
+               if(password_verify($password, $result['user_password']))
+               {
+                   
+                    return $result;
+               }
+                else {
+                    
+                    return FALSE;
+                }
+            }
         } catch (PDOException $e) {
             die("" . $e->getMessage());
         }

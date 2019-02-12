@@ -126,7 +126,9 @@ class homeController extends Controller
         $user = new User(); 
         $post = new Post();
         $comment = new Comment();
-            
+        $currentUser = $user->getOne($_SESSION['user_name'],"user_name");
+        if(empty($currentUser))
+            $this->redirect("home/enter");
         if(isset($_POST))
         {
             $valid = new Validation();
@@ -136,7 +138,7 @@ class homeController extends Controller
            
             if(empty($valid->errors))
             {
-                $user_id = 7;
+                $user_id = $currentUser[0]['user_id'];
                 $data = array('user_fk' =>$user_id ,
                                 'post_fk' => $id,
                                 "comment_content" => $_POST['comment_content'] );
@@ -471,7 +473,10 @@ class homeController extends Controller
             $valid->name("Password ")->value($_POST['user_password'])->required();
             if(empty($valid->errors))
             {
+               
+                $_POST['user_password'] = password_hash($_POST['user_password'],PASSWORD_DEFAULT);
                 $user->insert($_POST);
+                
                 echo "
                 <div style = 'padding: 40px;
                     background-color: blue;
