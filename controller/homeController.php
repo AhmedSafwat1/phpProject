@@ -420,12 +420,19 @@ class homeController extends Controller
     $user = new User(); 
     $post = new Post();
     $comment = new Comment();
-    $postFile = $post->getOne($id)[0];
+    $postFile = $post->getAllPostInfo("where post_id = $id")[0];
     $pdf = new FPDF();
     $pdf->AddPage();
     $pdf->SetFont('Arial','B',16);
-    $pdf->Cell(60,10,$postFile['post_title']);
-    $pdf->Cell(70,10,$postFile['post_content'],3);
+    $pdf->SetFillColor(193,229,252);
+    $pdf->Cell(60,10,"Title: ".$postFile['post_title'],0,0,'',TRUE);
+    $pdf->Cell(60,10,"                      ");
+    $pdf->Cell(60,10,$postFile['post_created'],0,0,'',TRUE);
+    $pdf->Ln(20);
+    $pdf->SetFillColor(150,229,200);
+    $pdf->Cell(80,10,"Published By:  ".$postFile['user_name'],0,0,'',TRUE);
+    $pdf->Ln(20);
+    $pdf->Cell(188,50,$postFile['post_content'],0,1,'C');
    
     $pdf->Output();
    }
